@@ -1,8 +1,8 @@
 %{
-open Ast
-%}
+    open Ast
+	 %}
 
-%token VAR PLUS MOINS AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL LPAREN RPAREN DEBUT FIN PTVIRG VIDE EOF
+%token VAR PLUS MOINS AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL PARENG PAREND DEBUT FIN PTVIRG EOF
 %token<string> IDENT
 %token<int> NB
 
@@ -11,30 +11,39 @@ open Ast
 
 s: p=programme EOF { p }
 
-programme: d=declarations i=instruction {(d, i)}
+programme: decl=declarations ins=instruction { (decl, ins) }
 
 declarations:
-| VAR i=IDENT PTVIRG declarations { i } /*todo liste TP9 pour declarations*/
-| VIDE {  }
+  | VAR id=IDENT PTVIRG decl=declarations { id :: decl }
+  | { [] }
 
 instruction:
-| AVANCE e=expression { Avance e }
-| TOURNE e=expression { Tourne e }
-| BASPINCEAU { BasPinceau }
-| HAUTPINCEAU { HautPinceau }
-| i=IDENT EGAL e=expression { Assignation (i, e) }
-| DEBUT bi=blocInstruction FIN {  } /*liste TP9*/
+  | AVANCE e=expression { [Avance e] }
+  | TOURNE e=expression { [Tourne e] }
+  | BASPINCEAU { [BasPinceau] }
+  | HAUTPINCEAU { [HautPinceau] }
+  | i=IDENT EGAL e=expression { [Assignation (i, e)] }
+  | DEBUT bloc=blocInstruction FIN { bloc }
 
-blocInstruction: /*TP9 liste*/
-| i=instruction PTVIRG bi=blocInstruction {  }
-| VIDE {  }
+blocInstruction:
+  | i=instruction PTVIRG bloc=blocInstruction { i @ bloc } /* à changer */
+  | { [] }
 
 expression:
-| nb=NB es=expressionSuite { Nombre nb } /*liste TP9*/
-| i=IDENT es=expressionSuite { i } /*liste TP9*/
-| LPAREN e=expression RPAREN es=expressionSuite { e } /*liste TP9*/
+  | nb=NB { Nombre nb }
+  | i=IDENT { Var i }
+  | PARENG e=expression PAREND  { e }
+  | l=expression PLUS r=expression { Plus (l,r) }
+  | l=expression MOINS r=expression { Moins (l,r) }
 
-expressionSuite:
-| PLUS e=expression { Plus e }
-| MOINS e=expression { Moins e }
-| VIDE {  }
+
+
+/* expression: */
+/*   | nb=NB es=expressionSuite { Nombre nb } */
+/*   | i=IDENT es=expressionSuite { i } */
+/*   | PARENG e=expression PAREND es=expressionSuite { e } */
+
+/* expressionSuite: */
+/*   | PLUS e=expression { Plus e } */
+/*   | MOINS e=expression { Moins e } */
+/*   | { } */
