@@ -1,6 +1,10 @@
-type programme = variable list * instruction list
-
 type variable = string
+
+type expression =
+  | Plus of expression * expression
+  | Moins of expression * expression
+  | Nombre of int  
+  | Var of variable
 
 type instruction =
   | Avance of expression
@@ -9,7 +13,4 @@ type instruction =
   | HautPinceau
   | Assignation of variable * expression
 
-type expression =
-  | Plus of expression * expression
-  | Moins of expression * expression
-  | Nombre of int  
+type programme = variable list * instruction list
