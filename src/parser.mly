@@ -1,10 +1,13 @@
 %{
     open Ast
-	 %}
+%}
 
 %token VAR PLUS MOINS AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL PARENG PAREND DEBUT FIN PTVIRG EOF
 %token<string> IDENT
 %token<int> NB
+
+%left MOINS
+%left PLUS
 
 %start <Ast.programme> s
 %%
@@ -33,9 +36,10 @@ expression:
   | nb=NB { Nombre nb }
   | i=IDENT { Var i }
   | PARENG e=expression PAREND  { e }
-  | l=expression PLUS r=expression { Plus (l,r) }
-  | l=expression MOINS r=expression { Moins (l,r) }
-
+  | l=expression o=op r=expression { EOpBin (l,o,r) }
+%inline op:
+  | PLUS { Plus }
+  | MOINS { Moins }
 
 
 /* expression: */

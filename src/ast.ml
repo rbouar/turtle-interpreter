@@ -1,8 +1,11 @@
 type variable = string
 
+type opbin =
+  | Plus
+  | Moins
+
 type expression =
-  | Plus of expression * expression
-  | Moins of expression * expression
+  | EOpBin of expression * opbin * expression
   | Nombre of int  
   | Var of variable
 
@@ -16,20 +19,21 @@ type instruction =
 type programme = variable list * instruction list
 
 (* Fonctions pour afficher *)
-let rec expression_to_string expr =
-  match expr with
-  | Plus (l, r) -> "(" ^ expression_to_string l ^ " + " ^ expression_to_string r ^ ")"
-  | Moins (l,r) -> "(" ^ expression_to_string l ^ " - " ^ expression_to_string r ^ ")"
+let opbin_to_string = function
+  | Plus -> "+"
+  | Moins -> "-"
+
+let rec expression_to_string = function
+  | EOpBin (l, op, r) -> "(" ^ expression_to_string l ^ opbin_to_string op ^ expression_to_string r ^ ")"
   | Nombre n -> string_of_int n
   | Var v -> v
 
-let rec instruction_to_string ins =
-  match ins with
-  | Avance expr -> "(Avance " ^ expression_to_string expr ^ ")\n"
-  | Tourne expr -> "(Tourne " ^ expression_to_string expr ^ ")\n"
-  | BasPinceau -> "(BasPinceau)\n"
-  | HautPinceau -> "(HautPinceau)\n"
-  | Assignation (v,e) -> "(" ^ v ^ " = " ^ expression_to_string e ^ ")\n"
+let rec instruction_to_string = function
+  | Avance expr -> "(Avance " ^ expression_to_string expr ^ ")"
+  | Tourne expr -> "(Tourne " ^ expression_to_string expr ^ ")"
+  | BasPinceau -> "(BasPinceau)"
+  | HautPinceau -> "(HautPinceau)"
+  | Assignation (v,e) -> "(" ^ v ^ " = " ^ expression_to_string e ^ ")"
 
 let rec programme_to_string (vl, il) =
   variable_list_to_string vl ^ "\n" ^ instruction_list_to_string il
@@ -42,4 +46,4 @@ and variable_list_to_string vl =
 and instruction_list_to_string il =
   match il with
   | [] -> ""
-  | i :: il' -> instruction_to_string i ^ instruction_list_to_string il'
+  | i :: il' -> instruction_to_string i ^ "\n" ^ instruction_list_to_string il'
