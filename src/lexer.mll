@@ -27,6 +27,6 @@ rule main = parse
   | "Avance"		{ AVANCE }
   | "Tourne"		{ TOURNE }
   | identificateur	{ IDENT(Lexing.lexeme lexbuf) }
-  | nombre		{ NB(Lexing.lexeme lexbuf) }
+  | nombre		{ NB(int_of_string (Lexing.lexeme lexbuf)) }
   | eof			{ EOF }
   | _			{ failwith "unexpected character" }
