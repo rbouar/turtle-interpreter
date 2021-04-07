@@ -4,4 +4,4 @@
 
 (executable
  (name main)
- (libraries graphics))
+ (libraries graphics unix))

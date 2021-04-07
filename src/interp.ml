@@ -15,10 +15,13 @@ type turtle = {
   width : int; *)
 }
 
+let dimension = 800;;
+let scale = 1;;
+let sleep = 0.05;;
+
 let create_window w h =
   open_graph (" " ^ string_of_int w ^ "x" ^ string_of_int h);
   set_window_title "GASP   -   by Romain & Luka";
-  set_font "-*-fixed-medium-r-semicondensed-*-25-*-*-*-*-*-iso8859-1";
   set_line_width 2;
   auto_synchronize true
 ;;
@@ -27,11 +30,17 @@ let reset_window () =
   clear_graph ();
 ;;
 
+let move turtle =
+  let x = int_of_float(turtle.pos.x) * scale in
+  let y = int_of_float(turtle.pos.y) * scale in
+  if turtle.pinceau then (Unix.sleepf(sleep);lineto x y) else moveto x y
+;;
+
 let convert_angle a =
   let conv_deg_rad = Float.pi /. 180. in
   let angle_float = float_of_int a in
   let rad_a = angle_float *. conv_deg_rad in
-  (-.(sin rad_a), cos rad_a)
+  (cos rad_a, sin rad_a)
 ;;
 
 (* list.iter *)
@@ -48,8 +57,8 @@ let avance t dist =
   let (unit_x, unit_y) = convert_angle t.pos.a in
   let nx = t.pos.x +. unit_x *. float_dist in
   let ny = t.pos.y +. unit_y *. float_dist in
-  { pos = {x = nx; y = ny; a = t.pos.a};
-    pinceau = t.pinceau }
+  let nt = { pos = {x = nx; y = ny; a = t.pos.a}; pinceau = t.pinceau } in
+  move nt; nt
 ;;
 
 let tourne t angl =
@@ -94,3 +103,11 @@ and interp_expr e var_t = match e with
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
 ;;
 
+let show prgm =
+  create_window dimension dimension;
+  reset_window ();
+  interp prgm;
+  let event = wait_next_event [Key_pressed] in
+  match event.key with
+  |_ -> close_graph ()
+;;
