@@ -8,11 +8,19 @@ type position = {
   a: int;        (** angle of the direction *)
 }
 
+type turtle = {
+  pos : position;
+  pinceau : bool;
+  (* states : (position * Graphics.color * int) list;
+  color : Graphics.color;
+  width : int; *)
+}
+
 let dimension = 800;;
 
 let create_window w h =
   open_graph (" " ^ string_of_int w ^ "x" ^ string_of_int h);
-  set_window_title "L-SYSTEMES   -   by Lucas & Luka";
+  set_window_title "GASP   -   by Romain & Luka";
   set_font "-*-fixed-medium-r-semicondensed-*-25-*-*-*-*-*-iso8859-1";
   set_line_width 2;
   auto_synchronize true
@@ -29,49 +37,66 @@ let convert_angle a =
   (-.(sin rad_a), cos rad_a)
 ;;
 
-let avance pos dist =
+let list_to_table l =
+  let t = Hashtbl.create (List.length l) in
+  let rec parcours l = match l with
+    | [] -> t
+    | p::r -> Hashtbl.add t p 0; parcours r
+  in parcours l
+;;
+
+let avance t dist =
   let float_dist = float_of_int dist in
-  let (unit_x, unit_y) = convert_angle pos.a in
-  let nx = pos.x +. unit_x *. float_dist in
-  let ny = pos.y +. unit_y *. float_dist in
-  {x = nx; y = ny; a = na}
+  let (unit_x, unit_y) = convert_angle t.pos.a in
+  let nx = t.pos.x +. unit_x *. float_dist in
+  let ny = t.pos.y +. unit_y *. float_dist in
+  { pos = {x = nx; y = ny; a = t.pos.a};
+    pinceau = t.pinceau }
 ;;
 
-let tourne pos angle =
-  {x = pos.x; y = pos.y; a = ((pos.a + angle) mod 360)}
+let tourne t angl =
+  { pos = {x = t.pos.x; y = t.pos.y; a = t.pos.a + angl};
+    pinceau = t.pinceau }
 ;;
 
-let interp e var_l val_l = 
-
-let assignation v e var_l val_l =
-  let rec find_var var_l index = match var_l with
-    |[] -> Error
-    |t::q when t = v -> index
-    |t::q -> find_var q (index + 1)
-  in
-  let index = find_v var_l 0 in
-  val_l.set index (interp e var_l val_l) in val_l
+let hautpinceau t =
+  { pos = t.pos; pinceau = false }
 ;;
 
+let baspinceau t =
+  { pos = t.pos; pinceau = true }
+;;
 
-let turtle ast =
-  let (var_l, val_l) = ast in
-  let pos_init = {x = 0.; y = 0.; z = 90} in
-  let val_l = Array.make (List.length var_l) 0 in
-  let rec parcours pos pinceau var_l val_l instr_l = match instr_l with
+let assignation tbl var value =
+  if Hashtbl.mem tbl var then
+    Hashtbl.replace tbl var value
+  else raise Not_found
+;;
+
+let rec interp prgm =
+  let (var_l, instr_l) = prgm in
+  let var_t = list_to_table var_l in
+  interp_instr var_t instr_l
+
+and interp_instr var_t instr_l =
+  let turtle = { pos = {x = 0.; y = 0.; a = 90}; pinceau = false } in
+  let rec aux turtle var_t instr_l = match instr_l with
     | [] -> ()
-    | Avance e :: q -> let i = interp e var_l val_l in parcours (avance pos i pinceau) pinceau var_l val_l q
-    | Tourne e :: q -> let i = interp e var_l val_l in parcours (tourne pos i) pinceau var_l val_l q
-    | HautPinceau :: q-> parcours pos false var_l val_l q
-    | BasPinceau :: q-> parcours pos true var_l val_l q
-    | Assignation (v, e) :: q -> let new_val_l = assignation v e var_l val_l in parcours pos pinceau var_l new_val_l q
-  in parcours pos_init true var_l val_l instr_l
+    | Avance e :: q -> aux (avance turtle (interp_expr e var_t)) var_t q
+    | Tourne e :: q -> aux (tourne turtle (interp_expr e var_t)) var_t q
+    | HautPinceau :: q -> aux (hautpinceau turtle) var_t q
+    | BasPinceau :: q -> aux (baspinceau turtle) var_t q
+    | Assignation (v, e) :: q -> (assignation var_t v (interp_expr e var_t)); aux turtle var_t q
+  in aux turtle var_t instr_l
+
+and interp_expr e var_t = match e with
+  | Nombre nb -> nb
+  | Var v -> if Hashtbl.mem var_t v then Hashtbl.find var_t v else raise Not_found
+  | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
+  | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
 ;;
 
-
-(*let _ =
+let _ =
   create_window dimension dimension;
-  while true do
-    reset_window ()
-  done;;
-*)
+  reset_window ()
+;;
