@@ -37,6 +37,7 @@ let convert_angle a =
   (-.(sin rad_a), cos rad_a)
 ;;
 
+(* list.iter *)
 let list_to_table l =
   let t = Hashtbl.create (List.length l) in
   let rec parcours l = match l with
@@ -96,7 +97,7 @@ and interp_expr e var_t = match e with
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
 ;;
 
-let _ =
+(* let _ =
   create_window dimension dimension;
   reset_window ()
-;;
+;; *)
