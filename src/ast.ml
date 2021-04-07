@@ -28,7 +28,7 @@ let rec expression_to_string = function
   | Nombre n -> string_of_int n
   | Var v -> v
 
-let rec instruction_to_string = function
+let instruction_to_string = function
   | Avance expr -> "(Avance " ^ expression_to_string expr ^ ")"
   | Tourne expr -> "(Tourne " ^ expression_to_string expr ^ ")"
   | BasPinceau -> "(BasPinceau)"

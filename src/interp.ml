@@ -1,5 +1,4 @@
-(*ocamlopt -o interp graphics.cmxa interp.ml*)
-
+open Ast
 open Graphics
 
 type position = {
@@ -15,8 +14,6 @@ type turtle = {
   color : Graphics.color;
   width : int; *)
 }
-
-let dimension = 800;;
 
 let create_window w h =
   open_graph (" " ^ string_of_int w ^ "x" ^ string_of_int h);
@@ -97,7 +94,3 @@ and interp_expr e var_t = match e with
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
 ;;
 
-(* let _ =
-  create_window dimension dimension;
-  reset_window ()
-;; *)
