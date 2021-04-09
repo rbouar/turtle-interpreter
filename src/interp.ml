@@ -80,22 +80,25 @@ let assignation tbl var value =
   else raise Not_found
 ;;
 
+(* interprète un programme *)
 let rec interp prgm =
-  let (var_l, instr_l) = prgm in
+  let (var_l, instr) = prgm in
   let var_t = list_to_table var_l in
-  interp_instr var_t instr_l
+  interp_instr var_t instr
 
-and interp_instr var_t instr_l =
+(* interprète une instruction *)
+and interp_instr var_t instr =
   let turtle = { pos = {x = 0.; y = 0.; a = 90}; pinceau = false } in
-  let rec aux turtle var_t instr_l = match instr_l with
-    | [] -> ()
-    | Avance e :: q -> aux (avance turtle (interp_expr e var_t)) var_t q
-    | Tourne e :: q -> aux (tourne turtle (interp_expr e var_t)) var_t q
-    | HautPinceau :: q -> aux (hautpinceau turtle) var_t q
-    | BasPinceau :: q -> aux (baspinceau turtle) var_t q
-    | Assignation (v, e) :: q -> (assignation var_t v (interp_expr e var_t)); aux turtle var_t q
-  in aux turtle var_t instr_l
+  let rec aux var_t turtle instr = match instr with
+    | Avance e -> avance turtle (interp_expr e var_t)
+    | Tourne e -> tourne turtle (interp_expr e var_t)
+    | HautPinceau -> hautpinceau turtle
+    | BasPinceau -> baspinceau turtle
+    | Assignation (v, e) -> let _ = assignation var_t v (interp_expr e var_t) in turtle
+    | Bloc l -> List.fold_left (aux var_t) turtle l
+  in aux var_t turtle instr
 
+(* interprète une expression *)
 and interp_expr e var_t = match e with
   | Nombre nb -> nb
   | Var v -> if Hashtbl.mem var_t v then Hashtbl.find var_t v else raise Not_found
@@ -106,7 +109,7 @@ and interp_expr e var_t = match e with
 let show prgm =
   create_window dimension dimension;
   reset_window ();
-  interp prgm;
+  let _ = interp prgm in
   let event = wait_next_event [Key_pressed] in
   match event.key with
   |_ -> close_graph ()

@@ -21,15 +21,15 @@ declarations:
   | { [] }
 
 instruction:
-  | AVANCE e=expression { [Avance e] }
-  | TOURNE e=expression { [Tourne e] }
-  | BASPINCEAU { [BasPinceau] }
-  | HAUTPINCEAU { [HautPinceau] }
-  | i=IDENT EGAL e=expression { [Assignation (i, e)] }
-  | DEBUT bloc=blocInstruction FIN { bloc }
+  | AVANCE e=expression { Avance e }
+  | TOURNE e=expression { Tourne e }
+  | BASPINCEAU { BasPinceau }
+  | HAUTPINCEAU { HautPinceau }
+  | i=IDENT EGAL e=expression { Assignation (i, e) }
+  | DEBUT ins=blocInstruction FIN { Bloc ins }
 
 blocInstruction:
-  | i=instruction PTVIRG bloc=blocInstruction { i @ bloc } /* à changer */
+  | i=instruction PTVIRG bloc=blocInstruction { i :: bloc }
   | { [] }
 
 expression:
@@ -40,14 +40,3 @@ expression:
 %inline op:
   | PLUS { Plus }
   | MOINS { Moins }
-
-
-/* expression: */
-/*   | nb=NB es=expressionSuite { Nombre nb } */
-/*   | i=IDENT es=expressionSuite { i } */
-/*   | PARENG e=expression PAREND es=expressionSuite { e } */
-
-/* expressionSuite: */
-/*   | PLUS e=expression { Plus e } */
-/*   | MOINS e=expression { Moins e } */
-/*   | { } */
