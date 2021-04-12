@@ -26,6 +26,9 @@ rule main = parse
   | "HautPinceau"	{ HAUTPINCEAU }
   | "Avance"		{ AVANCE }
   | "Tourne"		{ TOURNE }
+  | "Si"		{ SI }
+  | "Alors"		{ ALORS }
+  | "Sinon"		{ SINON }
   | identificateur	{ IDENT(Lexing.lexeme lexbuf) }
   | nombre		{ NB(int_of_string (Lexing.lexeme lexbuf)) }
   | eof			{ EOF }

@@ -1,0 +1,5 @@
+Debut
+BasPinceau;
+Si 1 Alors Tourne 0 - 45 Sinon Tourne 0 - 10;
+Avance 500;
+Fin

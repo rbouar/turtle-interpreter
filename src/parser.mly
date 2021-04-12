@@ -2,7 +2,13 @@
     open Ast
 %}
 
-%token VAR PLUS MOINS AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL PARENG PAREND DEBUT FIN PTVIRG EOF
+(* opérateurs binaires *)
+%token PLUS MOINS
+
+(* instructions *)
+%token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL DEBUT FIN SI ALORS SINON
+
+%token VAR PARENG PAREND PTVIRG EOF
 %token<string> IDENT
 %token<int> NB
 
@@ -27,6 +33,7 @@ instruction:
   | HAUTPINCEAU { HautPinceau }
   | i=IDENT EGAL e=expression { Assignation (i, e) }
   | DEBUT ins=blocInstruction FIN { Bloc ins }
+  | SI e=expression ALORS oui=instruction SINON non=instruction { Condition (e, oui, non) }
 
 blocInstruction:
   | i=instruction PTVIRG bloc=blocInstruction { i :: bloc }

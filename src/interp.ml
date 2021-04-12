@@ -96,6 +96,7 @@ and interp_instr var_t instr =
     | BasPinceau -> baspinceau turtle
     | Assignation (v, e) -> let _ = assignation var_t v (interp_expr e var_t) in turtle
     | Bloc l -> List.fold_left (aux var_t) turtle l
+    | Condition (expr, yes, no) -> if (interp_expr expr var_t) != 0 then aux var_t turtle yes else aux var_t turtle no
   in aux var_t turtle instr
 
 (* interprète une expression *)
