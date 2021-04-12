@@ -31,6 +31,8 @@ rule main = parse
   | "Si"		{ SI }
   | "Alors"		{ ALORS }
   | "Sinon"		{ SINON }
+  | "Tant que"		{ TANTQUE }
+  | "Faire"		{ FAIRE }
   | identificateur	{ IDENT(Lexing.lexeme lexbuf) }
   | nombre		{ NB(int_of_string (Lexing.lexeme lexbuf)) }
   | eof			{ EOF }

@@ -6,7 +6,7 @@
 %token PLUS MOINS FOIS DIV
 
 (* instructions *)
-%token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL DEBUT FIN SI ALORS SINON
+%token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL DEBUT FIN SI ALORS SINON TANTQUE FAIRE
 
 %token VAR PARENG PAREND PTVIRG EOF
 %token<string> IDENT
@@ -35,6 +35,7 @@ instruction:
   | i=IDENT EGAL e=expression { Assignation (i, e) }
   | DEBUT ins=blocInstruction FIN { Bloc ins }
   | SI e=expression ALORS oui=instruction SINON non=instruction { Condition (e, oui, non) }
+  | TANTQUE e=expression FAIRE ins=instruction { TantQue (e,ins) }
 
 blocInstruction:
   | i=instruction PTVIRG bloc=blocInstruction { i :: bloc }
