@@ -14,11 +14,13 @@ let nombre = (digit#'0')digit* | '0'
 rule main = parse
   | formatage		{ main lexbuf }
   | ')'			{ PAREND }
-  | '('			{ PARENG }  
+  | '('			{ PARENG }
   | '='			{ EGAL }
   | ';'			{ PTVIRG }
   | '+'			{ PLUS }
   | '-'			{ MOINS }
+  | '*'     { FOIS }
+  | '/'     { DIV }
   | "Var"		{ VAR }
   | "Debut"		{ DEBUT }
   | "Fin"		{ FIN }

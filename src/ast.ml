@@ -3,10 +3,12 @@ type variable = string
 type opbin =
   | Plus
   | Moins
+  | Fois
+  | Div
 
 type expression =
   | EOpBin of expression * opbin * expression
-  | Nombre of int  
+  | Nombre of int
   | Var of variable
 
 type instruction =
@@ -24,6 +26,8 @@ type programme = variable list * instruction
 let opbin_to_string = function
   | Plus -> "+"
   | Moins -> "-"
+  | Fois -> "*"
+  | Div -> "/"
 
 let rec expression_to_string = function
   | EOpBin (l, op, r) -> "(" ^ expression_to_string l ^ opbin_to_string op ^ expression_to_string r ^ ")"
@@ -41,7 +45,7 @@ let rec instruction_to_string = function
 
 let rec programme_to_string (var_l, ins) =
   variable_list_to_string var_l ^ "---------\n" ^  instruction_to_string ins
-  
+
 and variable_list_to_string vl =
   match vl with
   | [] -> ""

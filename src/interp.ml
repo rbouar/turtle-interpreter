@@ -105,6 +105,8 @@ and interp_expr e var_t = match e with
   | Var v -> if Hashtbl.mem var_t v then Hashtbl.find var_t v else raise Not_found
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
+  | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)
+  | EOpBin (e1, Div, e2) -> (interp_expr e1 var_t) / (interp_expr e2 var_t)
 ;;
 
 let show prgm =

@@ -3,7 +3,7 @@
 %}
 
 (* opérateurs binaires *)
-%token PLUS MOINS
+%token PLUS MOINS FOIS DIV
 
 (* instructions *)
 %token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EGAL DEBUT FIN SI ALORS SINON
@@ -12,8 +12,9 @@
 %token<string> IDENT
 %token<int> NB
 
-%left MOINS
-%left PLUS
+%left MOINS PLUS
+%left FOIS
+%left DIV
 
 %start <Ast.programme> s
 %%
@@ -47,3 +48,5 @@ expression:
 %inline op:
   | PLUS { Plus }
   | MOINS { Moins }
+  | FOIS { Fois }
+  | DIV { Div }
