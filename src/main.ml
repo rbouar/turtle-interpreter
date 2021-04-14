@@ -26,6 +26,9 @@ let _ =
   | Typecheck.Error s ->
     Printf.fprintf stderr "Type error: %s\n" s;
     exit (-1)
+  | Interp.Error s ->
+    Printf.fprintf stderr "Interpretation error: %s\n" s;
+    exit (-1)
 (* let _ =
   let lexbuf = Lexing.from_channel stdin in
   let ast = Parser.s Lexer.main lexbuf in

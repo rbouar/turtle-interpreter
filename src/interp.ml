@@ -1,8 +1,7 @@
 open Ast
 open Graphics
 
-exception Invalid_position of string
-exception Invalid_assignation of string
+exception Error of string
 
 type position = {
   x: float;      (** position x *)
@@ -40,7 +39,7 @@ let move turtle =
     if turtle.pinceau then
       (Unix.sleepf(sleep);lineto x y)
     else moveto x y
-  else raise (Invalid_position "The cursor is out of the canvas")
+  else raise (Error "The cursor is out of the canvas")
 ;;
 
 let convert_angle a =
@@ -116,7 +115,7 @@ and interp_expr e var_t = match e with
   | Var v -> if Hashtbl.mem var_t v then
       match Hashtbl.find var_t v with
       |Some value -> value
-      |None -> raise (Invalid_assignation (String.concat v ["Variable : '";"' has no value assigned"]))
+      |None -> raise (Error ("Variable without any value "^v))
     else raise Not_found
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
