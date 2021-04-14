@@ -1,9 +1,7 @@
 open Ast
 open Graphics
 
-exception Invalid_value of string
 exception Invalid_position of string
-exception Invalid_declaration of string
 exception Invalid_assignation of string
 
 type position = {
@@ -85,12 +83,13 @@ let baspinceau t =
 
 let assignation tbl var value =
   if Hashtbl.mem tbl var then Hashtbl.replace tbl var (Some value)
-  else raise (Invalid_declaration "Variable was not declared")
+  else raise Not_found
 ;;
 
 (* interprète un programme *)
 let rec interp prgm =
-  let (var_l, instr) = prgm in
+  let (decl_l, instr) = prgm in
+  let var_l = List.map (function (x,_) -> x) decl_l in
   let var_t = list_to_table var_l in
   interp_instr var_t instr
 
@@ -117,13 +116,12 @@ and interp_expr e var_t = match e with
   | Var v -> if Hashtbl.mem var_t v then
       match Hashtbl.find var_t v with
       |Some value -> value
-      |None -> raise (Invalid_assignation "No value was assigned to variable")
-    else raise (Invalid_declaration "Variable was not declared")
+      |None -> raise (Invalid_assignation (String.concat v ["Variable : '";"' has no value assigned"]))
+    else raise Not_found
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
   | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)
-  | EOpBin (e1, Div, e2) -> try (interp_expr e1 var_t) / (interp_expr e2 var_t) with
-      Division_by_zero -> raise (Invalid_value "Cannot divide by zero")
+  | EOpBin (e1, Div, e2) -> (interp_expr e1 var_t) / (interp_expr e2 var_t)
 ;;
 
 let show prgm =

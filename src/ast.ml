@@ -21,7 +21,11 @@ type instruction =
   | Condition of expression * instruction * instruction
   | TantQue of expression * instruction
 
-type programme = variable list * instruction
+type typ = Int
+
+type declaration = variable*typ
+
+type programme = declaration list * instruction
 
 (* Fonctions pour afficher *)
 let opbin_to_string = function
