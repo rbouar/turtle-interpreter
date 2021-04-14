@@ -1,6 +1,11 @@
 open Ast
 open Graphics
 
+exception Invalid_value of string
+exception Invalid_position of string
+exception Invalid_declaration of string
+exception Invalid_assignation of string
+
 type position = {
   x: float;      (** position x *)
   y: float;      (** position y *)
@@ -33,7 +38,11 @@ let reset_window () =
 let move turtle =
   let x = int_of_float(turtle.pos.x) * scale in
   let y = int_of_float(turtle.pos.y) * scale in
-  if turtle.pinceau then (Unix.sleepf(sleep);lineto x y) else moveto x y
+  if(x >= 0 && x <= dimension && y >= 0 && y <= dimension) then
+    if turtle.pinceau then
+      (Unix.sleepf(sleep);lineto x y)
+    else moveto x y
+  else raise (Invalid_position "The cursor is out of the canvas")
 ;;
 
 let convert_angle a =
@@ -48,7 +57,7 @@ let list_to_table l =
   let t = Hashtbl.create (List.length l) in
   let rec parcours l = match l with
     | [] -> t
-    | p::r -> Hashtbl.add t p 0; parcours r
+    | p::r -> Hashtbl.add t p None; parcours r
   in parcours l
 ;;
 
@@ -75,9 +84,8 @@ let baspinceau t =
 ;;
 
 let assignation tbl var value =
-  if Hashtbl.mem tbl var then
-    Hashtbl.replace tbl var value
-  else raise Not_found
+  if Hashtbl.mem tbl var then Hashtbl.replace tbl var (Some value)
+  else raise (Invalid_declaration "Variable was not declared")
 ;;
 
 (* interprète un programme *)
@@ -106,11 +114,16 @@ and interp_instr var_t instr =
 (* interprète une expression *)
 and interp_expr e var_t = match e with
   | Nombre nb -> nb
-  | Var v -> if Hashtbl.mem var_t v then Hashtbl.find var_t v else raise Not_found
+  | Var v -> if Hashtbl.mem var_t v then
+      match Hashtbl.find var_t v with
+      |Some value -> value
+      |None -> raise (Invalid_assignation "No value was assigned to variable")
+    else raise (Invalid_declaration "Variable was not declared")
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
   | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)
-  | EOpBin (e1, Div, e2) -> (interp_expr e1 var_t) / (interp_expr e2 var_t)
+  | EOpBin (e1, Div, e2) -> try (interp_expr e1 var_t) / (interp_expr e2 var_t) with
+      Division_by_zero -> raise (Invalid_value "Cannot divide by zero")
 ;;
 
 let show prgm =
