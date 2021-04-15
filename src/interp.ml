@@ -39,7 +39,7 @@ let move turtle =
     if turtle.pinceau then
       (Unix.sleepf(sleep);lineto x y)
     else moveto x y
-  else raise (Error "The cursor is out of the canvas")
+  else raise (Error ("The cursor is out of the canvas: ("^string_of_int x^","^string_of_int y^")"))
 ;;
 
 let convert_angle a =
