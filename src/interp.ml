@@ -82,13 +82,12 @@ let baspinceau t =
 
 let assignation tbl var value =
   if Hashtbl.mem tbl var then Hashtbl.replace tbl var (Some value)
-  else raise Not_found
+  else raise (Error ("Variable not declared: "^var))
 ;;
 
 (* interprète un programme *)
 let rec interp prgm =
-  let (decl_l, instr) = prgm in
-  let var_l = List.map (function (x,_) -> x) decl_l in
+  let (var_l, instr) = prgm in
   let var_t = list_to_table var_l in
   interp_instr var_t instr
 
@@ -104,9 +103,9 @@ and interp_instr var_t instr =
     | Bloc l -> List.fold_left (aux var_t) turtle l
     | Condition (expr, yes, no) -> if (interp_expr expr var_t) != 0 then aux var_t turtle yes else aux var_t turtle no
     | TantQue (cond, ins) as boucle -> if (interp_expr cond var_t) = 0 then turtle
-                                       else let turtle' = aux var_t turtle ins in
-                                            let eval = interp_expr cond var_t in
-                                            if eval = 0 then turtle' else aux var_t turtle' boucle
+      else let turtle' = aux var_t turtle ins in
+        let eval = interp_expr cond var_t in
+        if eval = 0 then turtle' else aux var_t turtle' boucle
   in aux var_t turtle instr
 
 (* interprète une expression *)
@@ -115,12 +114,12 @@ and interp_expr e var_t = match e with
   | Var v -> if Hashtbl.mem var_t v then
       match Hashtbl.find var_t v with
       |Some value -> value
-      |None -> raise (Error ("Variable without any value "^v))
-    else raise Not_found
+      |None -> raise (Error ("Variable without any value: "^v))
+    else raise (Error ("Variable not declared: "^v))
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
   | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)
-  | EOpBin (e1, Div, e2) -> (interp_expr e1 var_t) / (interp_expr e2 var_t)
+  | EOpBin (e1, Div, e2) -> try (interp_expr e1 var_t) / (interp_expr e2 var_t) with Division_by_zero -> raise (Error ("Division by zero"))
 ;;
 
 let show prgm =

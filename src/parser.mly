@@ -24,7 +24,7 @@ s: p=programme EOF { p }
 programme: decl=declarations ins=instruction { (decl, ins) }
 
 declarations:
-  | VAR id=IDENT PTVIRG decl=declarations { (id, Int) :: decl }
+  | VAR id=IDENT PTVIRG decl=declarations { id :: decl }
   | { [] }
 
 instruction:
