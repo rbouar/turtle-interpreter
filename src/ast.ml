@@ -7,6 +7,7 @@ type opbin =
   | Div
 
 type expression =
+  | Neg of expression
   | EOpBin of expression * opbin * expression
   | Nombre of int
   | Var of variable
@@ -31,6 +32,7 @@ let opbin_to_string = function
   | Div -> "/"
 
 let rec expression_to_string = function
+  | Neg e -> "(-" ^ expression_to_string e ^ ")"
   | EOpBin (l, op, r) -> "(" ^ expression_to_string l ^ opbin_to_string op ^ expression_to_string r ^ ")"
   | Nombre n -> string_of_int n
   | Var v -> v

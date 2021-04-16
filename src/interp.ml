@@ -119,7 +119,8 @@ and interp_expr e var_t = match e with
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
   | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)
-  | EOpBin (e1, Div, e2) -> try (interp_expr e1 var_t) / (interp_expr e2 var_t) with Division_by_zero -> raise (Error ("Division by zero"))
+  | EOpBin (e1, Div, e2) -> (try (interp_expr e1 var_t) / (interp_expr e2 var_t) with Division_by_zero -> raise (Error ("Division by zero")))
+  | Neg e -> (-(interp_expr e var_t))
 ;;
 
 let show prgm =

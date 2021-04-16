@@ -1,0 +1,15 @@
+Var angle;
+Debut
+angle = 90;
+Tourne -45;
+Avance 300;
+Tourne 45;
+BasPinceau;
+Avance 100;
+Tourne -angle;
+Avance 100;
+Tourne -angle;
+Avance 100;
+Tourne -angle;
+Avance 100;
+Fin

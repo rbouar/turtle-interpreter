@@ -46,6 +46,7 @@ expression:
   | i=IDENT { Var i }
   | PARENG e=expression PAREND  { e }
   | l=expression o=op r=expression { EOpBin (l,o,r) }
+  | MOINS e=expression { Neg e }
 %inline op:
   | PLUS { Plus }
   | MOINS { Moins }
