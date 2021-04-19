@@ -39,6 +39,7 @@ rule main = parse
   | "Fin"		{ FIN }
   | "BasPinceau"	{ BASPINCEAU }
   | "HautPinceau"	{ HAUTPINCEAU }
+  | "Epaisseur" { EPAISSEUR }
   | "Avance"		{ AVANCE }
   | "Tourne"		{ TOURNE }
   | "Si"		{ SI }

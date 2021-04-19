@@ -13,8 +13,7 @@ type turtle = {
   pos : position;
   pinceau : bool;
   (* states : (position * Graphics.color * int) list;
-  color : Graphics.color;
-  width : int; *)
+  color : Graphics.color; *)
 }
 
 let dimension = 800;;
@@ -73,11 +72,16 @@ let tourne t angl =
 ;;
 
 let hautpinceau t =
-  { pos = t.pos; pinceau = false }
+  { pos = t.pos; pinceau = false  }
 ;;
 
 let baspinceau t =
   { pos = t.pos; pinceau = true }
+;;
+
+let epaisseur value =
+  if value <= 0 then raise (Error ("Width value is negativ or zero: "^ string_of_int value))
+  else set_line_width value
 ;;
 
 let assignation tbl var value =
@@ -99,6 +103,7 @@ and interp_instr var_t instr =
     | Tourne e -> tourne turtle (interp_expr e var_t)
     | HautPinceau -> hautpinceau turtle
     | BasPinceau -> baspinceau turtle
+    | Epaisseur e -> epaisseur (interp_expr e var_t); turtle
     | Assignation (v, e) -> let _ = assignation var_t v (interp_expr e var_t) in turtle
     | Bloc l -> List.fold_left (aux var_t) turtle l
     | SiAlorsSinon (expr, yes, no) -> if (interp_expr expr var_t) != 0 then aux var_t turtle yes else aux var_t turtle no
