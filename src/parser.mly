@@ -6,7 +6,10 @@
 %token PLUS MOINS FOIS DIV
 
 (* instructions *)
-%token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EPAISSEUR EGAL DEBUT FIN SI ALORS SINON TANTQUE FAIRE
+%token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EPAISSEUR EGAL DEBUT FIN SI ALORS SINON TANTQUE FAIRE COULEUR
+
+(* couleurs prédifinies *)
+%token NOIR BLANC ROUGE VERT BLEU JAUNE CYAN MAGENTA
 
 %token VAR PARENG PAREND PTVIRG EOF
 %token<string> IDENT
@@ -63,6 +66,17 @@ instruction:
   | SI e=expression ALORS oui=instruction SINON non=instruction { SiAlorsSinon (e, oui, non) }
   | SI e=expression ALORS ins=instruction { SiAlors (e, ins) }
   | TANTQUE e=expression FAIRE ins=instruction { TantQue (e,ins) }
+  | COULEUR c=couleur { Couleur c }
+
+couleur:
+  | NOIR      { Graphics.black }
+  | BLANC     { Graphics.white }
+  | ROUGE     { Graphics.red }
+  | VERT      { Graphics.green }
+  | BLEU      { Graphics.blue }
+  | JAUNE     { Graphics.yellow }
+  | CYAN      { Graphics.cyan }
+  | MAGENTA   { Graphics.magenta }
 
 blocInstruction:
   | i=instruction PTVIRG bloc=blocInstruction { i :: bloc }

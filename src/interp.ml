@@ -112,16 +112,17 @@ and interp_instr var_t instr =
                                        else let turtle' = aux var_t turtle ins in
                                             let eval = interp_expr cond var_t in
                                             if eval = 0 then turtle' else aux var_t turtle' boucle
+    | Couleur c -> let _ = Graphics.set_color c in turtle
   in aux var_t turtle instr
 
 (* interprète une expression *)
 and interp_expr e var_t = match e with
   | Nombre nb -> nb
   | Var v -> if Hashtbl.mem var_t v then
-      match Hashtbl.find var_t v with
-      |Some value -> value
-      |None -> raise (Error ("Variable without any value: "^v))
-    else raise (Error ("Variable not declared: "^v))
+               match Hashtbl.find var_t v with
+               |Some value -> value
+               |None -> raise (Error ("Variable without any value: "^v))
+             else raise (Error ("Variable not declared: "^v))
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
   | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)

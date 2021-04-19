@@ -47,6 +47,15 @@ rule main = parse
   | "Sinon"		{ SINON }
   | "Tant que"		{ TANTQUE }
   | "Faire"		{ FAIRE }
+  | "ChangeCouleur"	{ COULEUR }
+  | "noir"		{ NOIR }
+  | "blanc"		{ BLANC }
+  | "rouge"		{ ROUGE }
+  | "vert"		{ VERT }
+  | "bleu"		{ BLEU }
+  | "jaune"		{ JAUNE }
+  | "cyan"		{ CYAN }
+  | "magenta"		{ MAGENTA }
   | identificateur	{ IDENT(Lexing.lexeme lexbuf) }
   | nombre		{ NB(int_of_string (Lexing.lexeme lexbuf)) }
   | eof			{ EOF }

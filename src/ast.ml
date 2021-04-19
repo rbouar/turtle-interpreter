@@ -23,8 +23,10 @@ type instruction =
   | SiAlorsSinon of expression * instruction * instruction
   | SiAlors of expression * instruction
   | TantQue of expression * instruction
+  | Couleur of Graphics.color
 
 type programme = variable list * instruction
+
 
 (* Fonctions pour afficher *)
 let opbin_to_string = function
@@ -50,6 +52,7 @@ let rec instruction_to_string = function
   | SiAlorsSinon (expr, yes, no) -> "Si " ^ expression_to_string expr ^ " Alors " ^ instruction_to_string yes ^ " Sinon " ^ instruction_to_string no
   | SiAlors (expr, ins) -> "Si " ^ expression_to_string expr ^ " Alors " ^ instruction_to_string ins
   | TantQue (cond, ins) -> "Tant que " ^ expression_to_string cond ^ " Faire " ^ instruction_to_string ins
+  | Couleur c -> "(ChangeCouleur " ^ Printf.sprintf "0x%X" c ^ ")"
 
 let rec programme_to_string (var_l, ins) =
   variable_list_to_string var_l ^ "---------\n" ^  instruction_to_string ins
