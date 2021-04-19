@@ -24,7 +24,7 @@ let identificateur = minus_char (minus_char | upper_char | digit)*
 let nombre = (digit#'0')digit* | '0'
 
 rule main = parse
-  | '\n'    { next_line lexbuf; main lexbuf }
+  | '\n'		{ next_line lexbuf; main lexbuf }
   | formatage		{ main lexbuf }
   | ')'			{ PAREND }
   | '('			{ PARENG }
@@ -32,14 +32,14 @@ rule main = parse
   | ';'			{ PTVIRG }
   | '+'			{ PLUS }
   | '-'			{ MOINS }
-  | '*'     { FOIS }
-  | '/'     { DIV }
+  | '*'     		{ FOIS }
+  | '/'     		{ DIV }
   | "Var"		{ VAR }
   | "Debut"		{ DEBUT }
   | "Fin"		{ FIN }
   | "BasPinceau"	{ BASPINCEAU }
   | "HautPinceau"	{ HAUTPINCEAU }
-  | "Epaisseur" { EPAISSEUR }
+  | "ChangeEpaisseur" 	{ EPAISSEUR }
   | "Avance"		{ AVANCE }
   | "Tourne"		{ TOURNE }
   | "Si"		{ SI }

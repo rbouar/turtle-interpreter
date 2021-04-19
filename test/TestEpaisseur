@@ -17,7 +17,7 @@ BasPinceau;
 Tant que i Faire
      Debut
      ep = ep+1;
-     Epaisseur ep;
+     ChangeEpaisseur ep;
 	   i = i - 1;
 	   Avance distance;
      Tourne angle;
