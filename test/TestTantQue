@@ -1,12 +1,14 @@
 Var i;
 Var distance;
+Var angle;
 
 Debut
 
 i = 15;
 distance = 110;
+angle = 360 / i;
 
-Tourne 0 - 75;
+Tourne -75;
 Avance 400;
 
 BasPinceau;
@@ -14,6 +16,6 @@ Tant que i Faire
      Debut
 	i = i - 1;
 	Avance distance;
-     	Tourne 24;
+     	Tourne angle;
      Fin;
 Fin

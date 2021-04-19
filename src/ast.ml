@@ -19,7 +19,8 @@ type instruction =
   | HautPinceau
   | Assignation of variable * expression
   | Bloc of instruction list
-  | Condition of expression * instruction * instruction
+  | SiAlorsSinon of expression * instruction * instruction
+  | SiAlors of expression * instruction
   | TantQue of expression * instruction
 
 type programme = variable list * instruction
@@ -44,7 +45,8 @@ let rec instruction_to_string = function
   | HautPinceau -> "(HautPinceau)"
   | Assignation (v,e) -> "(" ^ v ^ " = " ^ expression_to_string e ^ ")"
   | Bloc l -> (List.fold_left (fun str ins -> str ^ instruction_to_string ins ^ "\n") "[\n" l) ^ "]"
-  | Condition (expr, yes, no) -> "Si " ^ expression_to_string expr ^ " Alors " ^ instruction_to_string yes ^ " Sinon " ^ instruction_to_string no
+  | SiAlorsSinon (expr, yes, no) -> "Si " ^ expression_to_string expr ^ " Alors " ^ instruction_to_string yes ^ " Sinon " ^ instruction_to_string no
+  | SiAlors (expr, ins) -> "Si " ^ expression_to_string expr ^ " Alors " ^ instruction_to_string ins
   | TantQue (cond, ins) -> "Tant que " ^ expression_to_string cond ^ " Faire " ^ instruction_to_string ins
 
 let rec programme_to_string (var_l, ins) =

@@ -12,9 +12,34 @@
 %token<string> IDENT
 %token<int> NB
 
+
+(* Priorité et associativité des opérations *)
+
+(* On donne à + et - la plus faible priorité. En revanche, on les rend
+   associatifs à gauche i.e. :
+   [1 + 2 + 3] interprété comme [(1 + 2) + 3]
+   [1 - 2 - 3] -> [(1 - 2) - 3] *)
+
+(* De même, pour * et / à la seule différence que / est prioritaire sur *. *)
+
+(* L'instruction [SI expr1 ALORS SI expr2 ALORS ins1 SINON ins2] provoque
+   un conflit shift-reduce.
+
+   Le conflit se produit après avoir découvert [SINON].
+
+   Reduce:
+   Si on réduit en utilisant [instruction -> SI expression ALORS instruction]
+   alors on interprète notre expression comme [SI expr1 ALORS (SI expr2 ALORS ins1) SINON ins2]
+
+   Shift:
+   On interprète comme [SI expr1 ALORS (SI expr2 ALORS ins1 SINON ins2)]
+   On privilégie cette dernière interprétation. *)
+
 %left MOINS PLUS
 %left FOIS
 %left DIV
+%nonassoc ALORS
+%nonassoc SINON
 
 %start <Ast.programme> s
 %%
@@ -34,7 +59,8 @@ instruction:
   | HAUTPINCEAU { HautPinceau }
   | i=IDENT EGAL e=expression { Assignation (i, e) }
   | DEBUT ins=blocInstruction FIN { Bloc ins }
-  | SI e=expression ALORS oui=instruction SINON non=instruction { Condition (e, oui, non) }
+  | SI e=expression ALORS oui=instruction SINON non=instruction { SiAlorsSinon (e, oui, non) }
+  | SI e=expression ALORS ins=instruction { SiAlors (e, ins) }
   | TANTQUE e=expression FAIRE ins=instruction { TantQue (e,ins) }
 
 blocInstruction:

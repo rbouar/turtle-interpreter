@@ -1,5 +1,38 @@
+Var i;
+Var j;
+Var distance;
+Var angle;
+
 Debut
-BasPinceau;
-Si 1 Alors Tourne 0 - 45 Sinon Tourne 0 - 10;
+
+j = -1;
+i = 10;
+distance = 110;
+angle = 360 / i;
+
+Tourne -75;
 Avance 500;
+
+BasPinceau;
+Tant que i Faire
+     Debut
+	i = i - 1;
+
+	Avance distance;
+	Si j - 1 Alors
+	   Debut
+		Tourne -(90 - angle);
+		Avance distance / 4;
+		Tourne -90;
+		Avance distance / 4;
+		Tourne -90;
+		Avance distance / 4;
+		Tourne -90;
+		Avance distance / 4;
+		Tourne -(360 - 2 * angle);
+	   Fin
+	Sinon
+	   Tourne -angle;
+	j = j * -1;
+      Fin;
 Fin

@@ -101,11 +101,12 @@ and interp_instr var_t instr =
     | BasPinceau -> baspinceau turtle
     | Assignation (v, e) -> let _ = assignation var_t v (interp_expr e var_t) in turtle
     | Bloc l -> List.fold_left (aux var_t) turtle l
-    | Condition (expr, yes, no) -> if (interp_expr expr var_t) != 0 then aux var_t turtle yes else aux var_t turtle no
+    | SiAlorsSinon (expr, yes, no) -> if (interp_expr expr var_t) != 0 then aux var_t turtle yes else aux var_t turtle no
+    | SiAlors (expr, ins) -> if (interp_expr expr var_t) != 0 then aux var_t turtle ins else turtle
     | TantQue (cond, ins) as boucle -> if (interp_expr cond var_t) = 0 then turtle
-      else let turtle' = aux var_t turtle ins in
-        let eval = interp_expr cond var_t in
-        if eval = 0 then turtle' else aux var_t turtle' boucle
+                                       else let turtle' = aux var_t turtle ins in
+                                            let eval = interp_expr cond var_t in
+                                            if eval = 0 then turtle' else aux var_t turtle' boucle
   in aux var_t turtle instr
 
 (* interprète une expression *)
