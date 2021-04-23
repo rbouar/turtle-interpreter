@@ -3,7 +3,7 @@
 %}
 
 (* opérateurs binaires *)
-%token PLUS MOINS FOIS DIV ET OU COMP DIFF
+%token PLUS MOINS FOIS DIV ET OU COMP DIFF SUP SUPEG INF INFEG
 
 (* instructions *)
 %token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EPAISSEUR EGAL DEBUT FIN SI ALORS SINON TANTQUE FAIRE COULEUR
@@ -38,11 +38,12 @@
    On interprète comme [SI expr1 ALORS (SI expr2 ALORS ins1 SINON ins2)]
    On privilégie cette dernière interprétation. *)
 
+%left OU ET
+%left COMP DIFF
+%left SUP SUPEG INF INFEG
 %left MOINS PLUS
 %left FOIS
 %left DIV
-%left OU ET
-%left COMP DIFF
 %nonassoc ALORS
 %nonassoc SINON
 
@@ -99,3 +100,7 @@ expression:
   | OU { Ou }
   | COMP { Comp }
   | DIFF { Diff }
+  | SUP { Sup }
+  | INF { Inf }
+  | SUPEG { SupEg }
+  | INFEG { InfEg }

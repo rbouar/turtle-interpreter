@@ -9,6 +9,10 @@ type opbin =
   | Ou
   | Comp
   | Diff
+  | Sup
+  | Inf
+  | SupEg
+  | InfEg
 
 type expression =
   | Neg of expression
@@ -42,6 +46,10 @@ let opbin_to_string = function
   | Ou -> "||"
   | Comp -> "=="
   | Diff -> "!="
+  | Sup -> ">"
+  | Inf -> "<"
+  | SupEg -> ">="
+  | InfEg -> "<="
 
 let rec expression_to_string = function
   | Neg e -> "(-" ^ expression_to_string e ^ ")"

@@ -34,6 +34,10 @@ rule main = parse
   | '-'			{ MOINS }
   | '*'     { FOIS }
   | '/'     { DIV }
+  | '>'     { SUP }
+  | '<'     { INF }
+  | ">="    { SUPEG }
+  | "<="    { INFEG }
   | "&&"    { ET }
   | "||"    { OU }
   | "=="    { COMP }

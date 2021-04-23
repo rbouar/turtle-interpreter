@@ -109,6 +109,22 @@ let op_DIFF v1 v2 =
   if v1 <> v2 then 1 else 0
 ;;
 
+let op_SUP v1 v2 =
+  if v1 > v2 then 1 else 0
+;;
+
+let op_INF v1 v2 =
+  if v1 < v2 then 1 else 0
+;;
+
+let op_SUPEG v1 v2 =
+  if v1 >= v2 then 1 else 0
+;;
+
+let op_INFEG v1 v2 =
+  if v1 <= v2 then 1 else 0
+;;
+
 
 (* interprète un programme *)
 let rec interp prgm =
@@ -152,6 +168,10 @@ and interp_expr e var_t = match e with
   | EOpBin (e1, Ou, e2) -> op_OU (interp_expr e1 var_t) (interp_expr e2 var_t)
   | EOpBin (e1, Comp, e2) -> op_COMP (interp_expr e1 var_t) (interp_expr e2 var_t)
   | EOpBin (e1, Diff, e2) -> op_DIFF (interp_expr e1 var_t) (interp_expr e2 var_t)
+  | EOpBin (e1, Sup, e2) -> op_SUP (interp_expr e1 var_t) (interp_expr e2 var_t)
+  | EOpBin (e1, Inf, e2) -> op_INF (interp_expr e1 var_t) (interp_expr e2 var_t)
+  | EOpBin (e1, SupEg, e2) -> op_SUPEG (interp_expr e1 var_t) (interp_expr e2 var_t)
+  | EOpBin (e1, InfEg, e2) -> op_INFEG (interp_expr e1 var_t) (interp_expr e2 var_t)
   | Neg e -> (-(interp_expr e var_t))
 ;;
 
