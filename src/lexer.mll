@@ -32,8 +32,12 @@ rule main = parse
   | ';'			{ PTVIRG }
   | '+'			{ PLUS }
   | '-'			{ MOINS }
-  | '*'     		{ FOIS }
-  | '/'     		{ DIV }
+  | '*'     { FOIS }
+  | '/'     { DIV }
+  | "&&"    { ET }
+  | "||"    { OU }
+  | "=="    { COMP }
+  | "!="    { DIFF }
   | "Var"		{ VAR }
   | "Debut"		{ DEBUT }
   | "Fin"		{ FIN }

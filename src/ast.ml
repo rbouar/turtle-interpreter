@@ -5,6 +5,10 @@ type opbin =
   | Moins
   | Fois
   | Div
+  | Et
+  | Ou
+  | Comp
+  | Diff
 
 type expression =
   | Neg of expression
@@ -34,6 +38,10 @@ let opbin_to_string = function
   | Moins -> "-"
   | Fois -> "*"
   | Div -> "/"
+  | Et -> "&&"
+  | Ou -> "||"
+  | Comp -> "=="
+  | Diff -> "!="
 
 let rec expression_to_string = function
   | Neg e -> "(-" ^ expression_to_string e ^ ")"

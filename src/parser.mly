@@ -3,7 +3,7 @@
 %}
 
 (* opérateurs binaires *)
-%token PLUS MOINS FOIS DIV
+%token PLUS MOINS FOIS DIV ET OU COMP DIFF
 
 (* instructions *)
 %token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EPAISSEUR EGAL DEBUT FIN SI ALORS SINON TANTQUE FAIRE COULEUR
@@ -41,6 +41,8 @@
 %left MOINS PLUS
 %left FOIS
 %left DIV
+%left OU ET
+%left COMP DIFF
 %nonassoc ALORS
 %nonassoc SINON
 
@@ -93,3 +95,7 @@ expression:
   | MOINS { Moins }
   | FOIS { Fois }
   | DIV { Div }
+  | ET { Et }
+  | OU { Ou }
+  | COMP { Comp }
+  | DIFF { Diff }

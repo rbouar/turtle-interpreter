@@ -89,6 +89,27 @@ let assignation tbl var value =
   else raise (Error ("Variable not declared: "^var))
 ;;
 
+let op_OU v1 v2 =
+  let b1 = v1 <> 0 in
+  let b2 = v2 <> 0 in
+  if b1 || b2 then 1 else 0
+;;
+
+let op_ET v1 v2 =
+  let b1 = v1 <> 0 in
+  let b2 = v2 <> 0 in
+  if b1 && b2 then 1 else 0
+;;
+
+let op_COMP v1 v2 =
+  if v1 = v2 then 1 else 0
+;;
+
+let op_DIFF v1 v2 =
+  if v1 <> v2 then 1 else 0
+;;
+
+
 (* interprète un programme *)
 let rec interp prgm =
   let (var_l, instr) = prgm in
@@ -127,6 +148,10 @@ and interp_expr e var_t = match e with
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
   | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)
   | EOpBin (e1, Div, e2) -> (try (interp_expr e1 var_t) / (interp_expr e2 var_t) with Division_by_zero -> raise (Error ("Division by zero")))
+  | EOpBin (e1, Et, e2) -> op_ET (interp_expr e1 var_t) (interp_expr e2 var_t)
+  | EOpBin (e1, Ou, e2) -> op_OU (interp_expr e1 var_t) (interp_expr e2 var_t)
+  | EOpBin (e1, Comp, e2) -> op_COMP (interp_expr e1 var_t) (interp_expr e2 var_t)
+  | EOpBin (e1, Diff, e2) -> op_DIFF (interp_expr e1 var_t) (interp_expr e2 var_t)
   | Neg e -> (-(interp_expr e var_t))
 ;;
 

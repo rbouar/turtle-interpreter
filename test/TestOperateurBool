@@ -1,0 +1,22 @@
+Var i;
+Var j;
+Var angle;
+Debut
+Tourne -45;
+Avance 300;
+Tourne 45;
+angle = 0-90;
+i = 1;
+j = 1;
+Si i != 7 && i == j Alors
+  Debut
+  BasPinceau;
+  Avance 100;
+  Tourne angle;
+  Avance 100;
+  Tourne angle;
+  Avance 100;
+  Tourne angle;
+  Avance 100;
+  Fin;
+Fin
