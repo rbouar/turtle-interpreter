@@ -89,6 +89,11 @@ let assignation tbl var value =
   else raise (Error ("Variable not declared: "^var))
 ;;
 
+let op_NON v =
+  let b = v <> 0 in
+  if not b then 1 else 0
+;;
+
 let op_OU v1 v2 =
   let b1 = v1 <> 0 in
   let b2 = v2 <> 0 in
@@ -160,6 +165,7 @@ and interp_expr e var_t = match e with
                |Some value -> value
                |None -> raise (Error ("Variable without any value: "^v))
              else raise (Error ("Variable not declared: "^v))
+  | Non e -> op_NON (interp_expr e var_t)
   | EOpBin (e1, Plus, e2) -> (interp_expr e1 var_t) + (interp_expr e2 var_t)
   | EOpBin (e1, Moins, e2) -> (interp_expr e1 var_t) - (interp_expr e2 var_t)
   | EOpBin (e1, Fois, e2) -> (interp_expr e1 var_t) * (interp_expr e2 var_t)

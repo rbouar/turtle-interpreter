@@ -2,6 +2,9 @@
     open Ast
 %}
 
+(* opérateur unaire *)
+%token NON
+
 (* opérateurs binaires *)
 %token PLUS MOINS FOIS DIV ET OU COMP DIFF SUP SUPEG INF INFEG
 
@@ -37,7 +40,7 @@
    Shift:
    On interprète comme [SI expr1 ALORS (SI expr2 ALORS ins1 SINON ins2)]
    On privilégie cette dernière interprétation. *)
-
+%left NON
 %left OU ET
 %left COMP DIFF
 %left SUP SUPEG INF INFEG
@@ -91,6 +94,7 @@ expression:
   | PARENG e=expression PAREND  { e }
   | l=expression o=op r=expression { EOpBin (l,o,r) }
   | MOINS e=expression { Neg e }
+  | NON e=expression { Non e }
 %inline op:
   | PLUS { Plus }
   | MOINS { Moins }

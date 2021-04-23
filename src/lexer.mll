@@ -42,6 +42,7 @@ rule main = parse
   | "||"    { OU }
   | "=="    { COMP }
   | "!="    { DIFF }
+  | "!"     { NON }
   | "Var"		{ VAR }
   | "Debut"		{ DEBUT }
   | "Fin"		{ FIN }

@@ -8,7 +8,7 @@ Tourne 45;
 angle = 0-90;
 i = 1;
 j = 1;
-Si i >= 1 && i == j Alors
+Si !!i==j && 19 Alors
   Debut
   BasPinceau;
   Avance 100;
