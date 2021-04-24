@@ -41,8 +41,8 @@
    On interprète comme [SI expr1 ALORS (SI expr2 ALORS ins1 SINON ins2)]
    On privilégie cette dernière interprétation. *)
 %left OU ET
-%left COMP DIFF
-%left SUP SUPEG INF INFEG
+%nonassoc COMP DIFF
+%nonassoc SUP SUPEG INF INFEG
 %left MOINS PLUS
 %left FOIS
 %left DIV
