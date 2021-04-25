@@ -32,17 +32,17 @@ rule main = parse
   | ';'			{ PTVIRG }
   | '+'			{ PLUS }
   | '-'			{ MOINS }
-  | '*'     { FOIS }
-  | '/'     { DIV }
-  | '>'     { SUP }
-  | '<'     { INF }
-  | ">="    { SUPEG }
-  | "<="    { INFEG }
-  | "&&"    { ET }
-  | "||"    { OU }
-  | "=="    { COMP }
-  | "!="    { DIFF }
-  | "!"     { NON }
+  | '*'     		{ FOIS }
+  | '/'     		{ DIV }
+  | '>'    		{ SUP }
+  | '<'    		{ INF }
+  | ">="   		{ SUPEG }
+  | "<="   		{ INFEG }
+  | "&&"   		{ ET }
+  | "||"   		{ OU }
+  | "=="   		{ COMP }
+  | "!="    		{ DIFF }
+  | "!"     		{ NON }
   | "Var"		{ VAR }
   | "Debut"		{ DEBUT }
   | "Fin"		{ FIN }
@@ -65,7 +65,12 @@ rule main = parse
   | "jaune"		{ JAUNE }
   | "cyan"		{ CYAN }
   | "magenta"		{ MAGENTA }
+  | "(*"		{ comment_parser lexbuf }
   | identificateur	{ IDENT(Lexing.lexeme lexbuf) }
   | nombre		{ NB(int_of_string (Lexing.lexeme lexbuf)) }
   | eof			{ EOF }
   | _			{ raise (Error (Lexing.lexeme lexbuf)) }
+and comment_parser = parse
+  | "*)"	        { main lexbuf }
+  | eof 		{ raise (Error "EOF dans les commentaires") }
+  | _			{ comment_parser lexbuf }

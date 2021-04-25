@@ -21,6 +21,7 @@ Tant que i Faire
 	Avance distance;
 	Si j - 1 Alors
 	   Debut
+		(* On dessine un carré *)
 		Tourne -(90 - angle);
 		Avance distance / 4;
 		Tourne -90;

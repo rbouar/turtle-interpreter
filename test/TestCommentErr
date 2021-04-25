@@ -1,0 +1,15 @@
+Var angle;
+
+Debut
+angle = -90;
+BasPinceau;
+
+(* On début un commentaire sans le fermer
+   Avance 100;
+   Tourne angle;
+   Avance 100;
+   Tourne angle;
+   Avance 100;
+   Tourne angle;
+   Avance 100;
+Fin

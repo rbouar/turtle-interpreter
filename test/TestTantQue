@@ -1,9 +1,11 @@
+(* Programme pour dessiner un polygone régulier *)
 Var i;
 Var distance;
 Var angle;
 
 Debut
 
+(* i est le nombre de côtés *)
 i = 15;
 distance = 110;
 angle = 360 / i;
