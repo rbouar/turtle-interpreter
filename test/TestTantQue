@@ -5,8 +5,8 @@ Var angle;
 
 Debut
 
-(* i est le nombre de côtés *)
-i = 15;
+
+i = 15; //i est le nombre de côtés
 distance = 110;
 angle = 360 / i;
 
@@ -21,3 +21,4 @@ Tant que i Faire
      	Tourne angle;
      Fin;
 Fin
+// Fin du programme
