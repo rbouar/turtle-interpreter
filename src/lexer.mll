@@ -65,12 +65,13 @@ rule main = parse
   | "jaune"		{ JAUNE }
   | "cyan"		{ CYAN }
   | "magenta"		{ MAGENTA }
-  | "(*"		{ comment_parser lexbuf }
+  | "(*"		{ multi_line_comment lexbuf }
   | identificateur	{ IDENT(Lexing.lexeme lexbuf) }
   | nombre		{ NB(int_of_string (Lexing.lexeme lexbuf)) }
   | eof			{ EOF }
   | _			{ raise (Error (Lexing.lexeme lexbuf)) }
-and comment_parser = parse
+and multi_line_comment = parse
   | "*)"	        { main lexbuf }
+  | "\n"		{ next_line lexbuf; multi_line_comment lexbuf }
   | eof 		{ raise (Error "EOF dans les commentaires") }
-  | _			{ comment_parser lexbuf }
+  | _			{ multi_line_comment lexbuf }
