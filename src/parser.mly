@@ -9,7 +9,7 @@
 %token PLUS MOINS FOIS DIV ET OU COMP DIFF SUP SUPEG INF INFEG
 
 (* instructions *)
-%token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EPAISSEUR EGAL DEBUT FIN SI ALORS SINON TANTQUE FAIRE COULEUR
+%token AVANCE TOURNE BASPINCEAU HAUTPINCEAU EPAISSEUR EGAL DEBUT FIN SI ALORS SINON TANTQUE FAIRE COULEUR POUR
 
 (* couleurs prédifinies *)
 %token NOIR BLANC ROUGE VERT BLEU JAUNE CYAN MAGENTA
@@ -73,6 +73,7 @@ instruction:
   | SI e=expression ALORS ins=instruction { SiAlors (e, ins) }
   | TANTQUE e=expression FAIRE ins=instruction { TantQue (e,ins) }
   | COULEUR c=couleur { Couleur c }
+  | POUR i=IDENT EGAL e1=expression PTVIRG e2=expression PTVIRG e3=expression FAIRE ins=instruction { Pour (i,e1,e2,e3,ins) }
 
 couleur:
   | NOIR      { Graphics.black }

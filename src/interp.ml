@@ -155,6 +155,10 @@ and interp_instr var_t instr =
                                             let eval = interp_expr cond var_t in
                                             if eval = 0 then turtle' else aux var_t turtle' boucle
     | Couleur c -> let _ = Graphics.set_color c in turtle
+    | Pour (variable, init, cond, next, ins) -> let turtle' = aux var_t turtle (Assignation (variable, init)) in
+      if (interp_expr cond var_t) = 0 then turtle'
+      else let turtle'' = aux var_t turtle' ins in
+        aux var_t turtle'' (Pour (variable, next, cond, next, ins))
   in aux var_t turtle instr
 
 (* interprète une expression *)

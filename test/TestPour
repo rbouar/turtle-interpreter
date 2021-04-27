@@ -1,0 +1,27 @@
+(* Programme pour dessiner un polygone régulier *)
+Var i;
+Var nb;
+Var distance;
+Var angle;
+
+Debut
+
+
+nb = 15; //i est le nombre de côtés
+distance = 50;
+angle = -140;
+
+Avance 400;
+Tourne -90;
+Avance 100;
+Tourne -angle/2;
+
+BasPinceau;
+Pour i = 0; i < 20; i + 1 Faire
+  Debut
+  Avance distance;
+  Tourne angle;
+  angle = -angle;
+  Fin;
+Fin
+// Fin du programme

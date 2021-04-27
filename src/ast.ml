@@ -33,6 +33,7 @@ type instruction =
   | SiAlors of expression * instruction
   | TantQue of expression * instruction
   | Couleur of Graphics.color
+  | Pour of variable * expression * expression * expression * instruction
 
 type programme = variable list * instruction
 
@@ -71,6 +72,7 @@ let rec instruction_to_string = function
   | SiAlors (expr, ins) -> "Si " ^ expression_to_string expr ^ " Alors " ^ instruction_to_string ins
   | TantQue (cond, ins) -> "Tant que " ^ expression_to_string cond ^ " Faire " ^ instruction_to_string ins
   | Couleur c -> "(ChangeCouleur " ^ Printf.sprintf "0x%X" c ^ ")"
+  | Pour (v, init, cond, next, ins) -> "Pour " ^ instruction_to_string (Assignation (v,init)) ^ ";" ^ expression_to_string cond ^ ";" ^ expression_to_string next ^ " Faire " ^ instruction_to_string ins
 
 let rec programme_to_string (var_l, ins) =
   variable_list_to_string var_l ^ "---------\n" ^  instruction_to_string ins

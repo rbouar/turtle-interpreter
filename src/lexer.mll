@@ -57,6 +57,7 @@ rule main = parse
   | "Tant que"		{ TANTQUE }
   | "Faire"		{ FAIRE }
   | "ChangeCouleur"	{ COULEUR }
+  | "Pour"    { POUR }
   | "noir"		{ NOIR }
   | "blanc"		{ BLANC }
   | "rouge"		{ ROUGE }
