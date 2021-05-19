@@ -1,5 +1,5 @@
 # Projet interpréteur pour la création d'images
-## Mis en route
+## Mise en route
 ### Dépendances
 - Nous utilisons la librairie
   [Graphics](https://ocaml.github.io/graphics/graphics/Graphics/index.html) pour
